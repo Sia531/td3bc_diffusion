@@ -1,0 +1,25 @@
+[project]
+name = "diffusion-policies-for-offline-rl"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "d4rl",
+    "gym",
+    "joblib",
+    "matplotlib",
+    "numpy",
+    "python-dateutil",
+    "seaborn",
+    "torch",
+    "cython==0.29.30",
+    "numpy==1.22.4",
+    "minari",
+    "tensorboard",
+    "huggingface_hub",
+    "gymnasium",
+]
+
+[tool.uv.sources]
+d4rl = { git = "https://github.com/rail-berkeley/d4rl" }
