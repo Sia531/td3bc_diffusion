@@ -1,13 +1,12 @@
 import copy
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.logger import logger
 
+from agents.helpers import EMA, SinusoidalPosEmb
 from toy_experiments.diffusion import Diffusion
-from agents.helpers import EMA
-from agents.helpers import SinusoidalPosEmb
 
 
 class MLP(nn.Module):

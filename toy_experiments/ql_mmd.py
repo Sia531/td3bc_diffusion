@@ -1,11 +1,8 @@
-import copy
 import numpy as np
 import torch
+import torch.distributions as td
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.logger import logger
-
-import torch.distributions as td
 
 LOG_SIG_MAX = 2
 LOG_SIG_MIN = -20

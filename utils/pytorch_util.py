@@ -1,8 +1,8 @@
 # Copyright 2022 Twitter, Inc and Zhendong Wang.
 # SPDX-License-Identifier: Apache-2.0
 
-import torch
 import numpy as np
+import torch
 
 
 def soft_update_from_to(source, target, tau):

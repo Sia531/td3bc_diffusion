@@ -1,232 +1,27 @@
-# Copyright 2022 Twitter, Inc and Zhendong Wang.
-# SPDX-License-Identifier: Apache-2.0
-
 import argparse
 import json
 import os
 
-import d4rl
-import gym
+import gymnasium as gym
+import minari
 import numpy as np
 import torch
 
+from hyperparameters import hyperparameters
 from utils import utils
 from utils.data_sampler import Data_Sampler
 from utils.logger import logger, setup_logger
 
-hyperparameters = {
-    "halfcheetah-medium-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 9.0,
-        "top_k": 1,
-    },
-    "hopper-medium-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 9.0,
-        "top_k": 2,
-    },
-    "walker2d-medium-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 1.0,
-        "top_k": 1,
-    },
-    "halfcheetah-medium-replay-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 2.0,
-        "top_k": 0,
-    },
-    "hopper-medium-replay-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 4.0,
-        "top_k": 2,
-    },
-    "walker2d-medium-replay-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 4.0,
-        "top_k": 1,
-    },
-    "halfcheetah-medium-expert-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 7.0,
-        "top_k": 0,
-    },
-    "hopper-medium-expert-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 5.0,
-        "top_k": 2,
-    },
-    "walker2d-medium-expert-v2": {
-        "lr": 3e-4,
-        "eta": 1.0,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 2000,
-        "gn": 5.0,
-        "top_k": 1,
-    },
-    "antmaze-umaze-v0": {
-        "lr": 3e-4,
-        "eta": 0.5,
-        "max_q_backup": False,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 2.0,
-        "top_k": 2,
-    },
-    "antmaze-umaze-diverse-v0": {
-        "lr": 3e-4,
-        "eta": 2.0,
-        "max_q_backup": True,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 3.0,
-        "top_k": 2,
-    },
-    "antmaze-medium-play-v0": {
-        "lr": 1e-3,
-        "eta": 2.0,
-        "max_q_backup": True,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 2.0,
-        "top_k": 1,
-    },
-    "antmaze-medium-diverse-v0": {
-        "lr": 3e-4,
-        "eta": 3.0,
-        "max_q_backup": True,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 1.0,
-        "top_k": 1,
-    },
-    "antmaze-large-play-v0": {
-        "lr": 3e-4,
-        "eta": 4.5,
-        "max_q_backup": True,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 10.0,
-        "top_k": 2,
-    },
-    "antmaze-large-diverse-v0": {
-        "lr": 3e-4,
-        "eta": 3.5,
-        "max_q_backup": True,
-        "reward_tune": "cql_antmaze",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 7.0,
-        "top_k": 1,
-    },
-    "pen-human-v1": {
-        "lr": 3e-5,
-        "eta": 0.15,
-        "max_q_backup": False,
-        "reward_tune": "normalize",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 7.0,
-        "top_k": 2,
-    },
-    "pen-cloned-v1": {
-        "lr": 3e-5,
-        "eta": 0.1,
-        "max_q_backup": False,
-        "reward_tune": "normalize",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 8.0,
-        "top_k": 2,
-    },
-    "kitchen-complete-v0": {
-        "lr": 3e-4,
-        "eta": 0.005,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 250,
-        "gn": 9.0,
-        "top_k": 2,
-    },
-    "kitchen-partial-v0": {
-        "lr": 3e-4,
-        "eta": 0.005,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 10.0,
-        "top_k": 2,
-    },
-    "kitchen-mixed-v0": {
-        "lr": 3e-4,
-        "eta": 0.005,
-        "max_q_backup": False,
-        "reward_tune": "no",
-        "eval_freq": 50,
-        "num_epochs": 1000,
-        "gn": 10.0,
-        "top_k": 0,
-    },
-}
 
-
-def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args):
-    # Load buffer
-    dataset = d4rl.qlearning_dataset(env)
+def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, args):
+    # 加载数据缓冲区（使用 Minari）
     data_sampler = Data_Sampler(dataset, device, args.reward_tune)
     utils.print_banner("Loaded buffer")
 
     if args.algo == "ql":
-        from agents.ql_diffusion import Diffusion_QL as Agent
+        import agents.ql_diffusion
 
+        Agent = agents.ql_diffusion.Diffusion_QL
         agent = Agent(
             state_dim=state_dim,
             action_dim=action_dim,
@@ -244,8 +39,9 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
             grad_norm=args.gn,
         )
     elif args.algo == "bc":
-        from agents.bc_diffusion import Diffusion_BC as Agent
+        import agents.bc_diffusion
 
+        Agent = agents.bc_diffusion.Diffusion_BC
         agent = Agent(
             state_dim=state_dim,
             action_dim=action_dim,
@@ -256,6 +52,24 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
             beta_schedule=args.beta_schedule,
             n_timesteps=args.T,
             lr=args.lr,
+        )
+    elif args.algo == "all":
+        import agents.td3bc_diffusion
+
+        Agent = agents.td3bc_diffusion.Diffusion_TD3BC
+        agent = Agent(
+            state_dim=state_dim,
+            action_dim=action_dim,
+            max_action=max_action,
+            device=device,
+            discount=args.discount,
+            tau=args.tau,
+            beta_schedule=args.beta_schedule,
+            n_timesteps=args.T,
+            lr=args.lr,
+            lr_decay=args.lr_decay,
+            lr_maxt=args.num_epochs,
+            gn=args.gn,
         )
 
     early_stop = False
@@ -289,7 +103,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
 
         # Evaluation
         eval_res, eval_res_std, eval_norm_res, eval_norm_res_std = eval_policy(
-            agent, args.env_name, args.seed, eval_episodes=args.eval_episodes
+            agent, dataset.env_spec.id, args.seed, eval_episodes=args.eval_episodes
         )
         evaluations.append(
             [
@@ -304,6 +118,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                 curr_epoch,
             ]
         )
+        os.makedirs(output_dir, exist_ok=True)
         np.save(os.path.join(output_dir, "eval"), evaluations)
         logger.record_tabular("Average Episodic Reward", eval_res)
         logger.record_tabular("Average Episodic N-Reward", eval_norm_res)
@@ -318,7 +133,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
         if args.save_best_model:
             agent.save_model(output_dir, curr_epoch)
 
-    # Model Selection: online or offline
+    # 模型选择：online 或 offline
     scores = np.array(evaluations)
     if args.ms == "online":
         best_id = np.argmax(scores[:, 2])
@@ -351,28 +166,45 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
     # writer.close()
 
 
-# Runs policy for X episodes and returns average reward
-# A fixed seed is used for the eval environment
+def unwrap_env(env):
+    while hasattr(env, "env"):
+        env = env.env
+    return env
+
+
+# 评估策略：在固定种子下运行若干个 episode 并返回平均 reward
 def eval_policy(policy, env_name, seed, eval_episodes=10):
     eval_env = gym.make(env_name)
-    eval_env.seed(seed + 100)
+    state, _ = eval_env.reset(seed=seed + 100)
+    eval_env.action_space.seed(seed + 100)
+    eval_env.observation_space.seed(seed + 100)
 
     scores = []
     for _ in range(eval_episodes):
         traj_return = 0.0
-        state, done = eval_env.reset(), False
-        while not done:
+        state, _ = eval_env.reset()
+        while True:
             action = policy.sample_action(np.array(state))
-            state, reward, done, _ = eval_env.step(action)
+            state, reward, terminated, truncated, _ = eval_env.step(action)
             traj_return += reward
+            if terminated or truncated:
+                break
         scores.append(traj_return)
 
     avg_reward = np.mean(scores)
     std_reward = np.std(scores)
 
-    normalized_scores = [eval_env.get_normalized_score(s) for s in scores]
-    avg_norm_score = eval_env.get_normalized_score(avg_reward)
-    std_norm_score = np.std(normalized_scores)
+    # 解包，尝试获取原始环境
+    base_env = unwrap_env(eval_env)
+
+    if hasattr(base_env, "get_normalized_score"):
+        normalized_scores = [base_env.get_normalized_score(s) for s in scores]
+        avg_norm_score = base_env.get_normalized_score(avg_reward)
+        std_norm_score = np.std(normalized_scores)
+    else:
+        normalized_scores = scores  # 不归一化
+        avg_norm_score = avg_reward
+        std_norm_score = std_reward
 
     utils.print_banner(
         f"Evaluation over {eval_episodes} episodes: {avg_reward:.2f} {avg_norm_score:.2f}"
@@ -382,45 +214,36 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    ### Experimental Setups ###
-    parser.add_argument("--exp", default="exp_1", type=str)  # Experiment ID
-    parser.add_argument(
-        "--device", default=0, type=int
-    )  # device, {"cpu", "cuda", "cuda:0", "cuda:1"}, etc
+    ### 实验设置 ###
+    parser.add_argument("--exp", default="exp_1", type=str)  # 实验ID
+    parser.add_argument("--device", default=0, type=int)  # 设备编号：0，1，...
     parser.add_argument(
         "--env_name", default="walker2d-medium-expert-v2", type=str
-    )  # OpenAI gym environment name
-    parser.add_argument("--dir", default="results", type=str)  # Logging directory
+    )  # 环境名称
+    parser.add_argument("--dir", default="results", type=str)  # 日志保存目录
     parser.add_argument(
         "--seed", default=0, type=int
-    )  # Sets Gym, PyTorch and Numpy seeds
+    )  # 设置 Gym、PyTorch 和 Numpy 的随机种子
     parser.add_argument("--num_steps_per_epoch", default=1000, type=int)
 
-    ### Optimization Setups ###
-    parser.add_argument("--batch_size", default=256, type=int)
+    ### 优化设置 ###
+    parser.add_argument("--batch_size", default=512, type=int)
     parser.add_argument("--lr_decay", action="store_true")
     parser.add_argument("--early_stop", action="store_true")
     parser.add_argument("--save_best_model", action="store_true")
 
-    ### RL Parameters ###
+    ### RL 参数 ###
     parser.add_argument("--discount", default=0.99, type=float)
     parser.add_argument("--tau", default=0.005, type=float)
 
-    ### Diffusion Setting ###
+    ### Diffusion 设置 ###
     parser.add_argument("--T", default=5, type=int)
     parser.add_argument("--beta_schedule", default="vp", type=str)
-    ### Algo Choice ###
-    parser.add_argument("--algo", default="ql", type=str)  # ['bc', 'ql']
+    ### 算法选择 ###
+    parser.add_argument("--algo", default="bc", type=str)  # ['bc', 'ql']
     parser.add_argument(
         "--ms", default="offline", type=str, help="['online', 'offline']"
     )
-    # parser.add_argument("--top_k", default=1, type=int)
-
-    # parser.add_argument("--lr", default=3e-4, type=float)
-    # parser.add_argument("--eta", default=1.0, type=float)
-    # parser.add_argument("--max_q_backup", action='store_true')
-    # parser.add_argument("--reward_tune", default='no', type=str)
-    # parser.add_argument("--gn", default=-1.0, type=float)
 
     args = parser.parse_args()
     args.device = f"cuda:{args.device}" if torch.cuda.is_available() else "cpu"
@@ -437,7 +260,7 @@ if __name__ == "__main__":
     args.gn = hyperparameters[args.env_name]["gn"]
     args.top_k = hyperparameters[args.env_name]["top_k"]
 
-    # Setup Logging
+    # 设置日志输出目录
     file_name = f"{args.env_name}|{args.exp}|diffusion-{args.algo}|T-{args.T}"
     if args.lr_decay:
         file_name += "|lr_decay"
@@ -451,27 +274,44 @@ if __name__ == "__main__":
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     utils.print_banner(f"Saving location: {results_dir}")
-    # if os.path.exists(os.path.join(results_dir, 'variant.json')):
-    #     raise AssertionError("Experiment under this setting has been done!")
     variant = vars(args)
     variant.update(version="Diffusion-Policies-RL")
 
-    env = gym.make(args.env_name)
+    # === 使用 Minari 加载数据集 ===
+    dataset = minari.load_dataset(args.env_name, download=True)
+    env_name = dataset.env_spec.id  # 获取对应的 Gymnasium 环境名
+    env = gym.make(env_name)
 
-    env.seed(args.seed)
+    # === 设置种子 ===
+    env.reset(seed=args.seed)
+    env.action_space.seed(args.seed)
+    env.observation_space.seed(args.seed)
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
 
+    # === 获取维度信息 ===
+    assert isinstance(env.observation_space, gym.spaces.Box), (
+        "Only supports Box observation space"
+    )
+    assert env.observation_space.shape is not None, "Observation space shape is None"
     state_dim = env.observation_space.shape[0]
+    assert isinstance(env.action_space, gym.spaces.Box), (
+        "Only supports Box action space"
+    )
+    assert env.action_space.shape is not None, "Action space shape is None"
     action_dim = env.action_space.shape[0]
     max_action = float(env.action_space.high[0])
 
+    # === 日志和参数记录 ===
     variant.update(state_dim=state_dim)
     variant.update(action_dim=action_dim)
     variant.update(max_action=max_action)
     setup_logger(os.path.basename(results_dir), variant=variant, log_dir=results_dir)
     utils.print_banner(
-        f"Env: {args.env_name}, state_dim: {state_dim}, action_dim: {action_dim}"
+        f"Env: {env_name}, state_dim: {state_dim}, action_dim: {action_dim}"
     )
 
-    train_agent(env, state_dim, action_dim, max_action, args.device, results_dir, args)
+    # === 开始训练 ===
+    train_agent(
+        dataset, state_dim, action_dim, max_action, args.device, results_dir, args
+    )

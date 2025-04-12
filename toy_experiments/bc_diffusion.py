@@ -1,12 +1,8 @@
-import copy
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from utils.logger import logger
 
-from toy_experiments.diffusion import Diffusion
 from agents.helpers import SinusoidalPosEmb
+from toy_experiments.diffusion import Diffusion
 
 
 class MLP(nn.Module):

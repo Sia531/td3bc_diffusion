@@ -1,10 +1,8 @@
 # Copyright 2022 Twitter, Inc and Zhendong Wang.
 # SPDX-License-Identifier: Apache-2.0
 
-import time
 import math
-import torch
-import numpy as np
+import time
 
 
 def print_banner(s, separator="-", num_star=60):

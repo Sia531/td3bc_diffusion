@@ -5,34 +5,31 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "d4rl",
-    "gym",
     "joblib",
     "matplotlib",
     "numpy",
     "python-dateutil",
     "seaborn",
-    "cython==0.29.30",
-    "numpy==1.22.4",
-    "minari",
+    "numpy",
+    "minari[all]",
     "tensorboard",
     "huggingface_hub",
-    "gymnasium",
+    "gymnasium[all]",
+    "types-python-dateutil",
 ]
 
 [tool.uv.sources]
-d4rl = { git = "https://github.com/rail-berkeley/d4rl" }
 torch = [
     { index = "pytorch-cpu", extra = "cpu" },
-    { index = "pytorch-cu124", extra = "cu124" },
+    { index = "pytorch-cu126", extra = "cu126" },
 ]
 
 [project.optional-dependencies]
 cpu = ["torch>=2.6.0"]
-cu124 = ["torch>=2.6.0"]
+cu126 = ["torch>=2.6.0"]
 
 [tool.uv]
-conflicts = [[{ extra = "cpu" }, { extra = "cu124" }]]
+conflicts = [[{ extra = "cpu" }, { extra = "cu126" }]]
 
 
 [[tool.uv.index]]
@@ -41,6 +38,11 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [[tool.uv.index]]
+<<<<<<< HEAD
 name = "pytorch-cu124"
 url = "https://download.pytorch.org/whl/cu124"
+=======
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+>>>>>>> f0b02b1 (migrate to new api and packages)
 explicit = true

@@ -1,10 +1,8 @@
 # Copyright 2022 Twitter, Inc and Zhendong Wang.
 # SPDX-License-Identifier: Apache-2.0
 
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from agents.helpers import SinusoidalPosEmb
 

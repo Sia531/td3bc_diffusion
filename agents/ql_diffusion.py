@@ -2,16 +2,16 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import copy
+
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from utils.logger import logger
 
 from agents.diffusion import Diffusion
-from agents.model import MLP
 from agents.helpers import EMA
+from agents.model import MLP
 
 
 class Critic(nn.Module):

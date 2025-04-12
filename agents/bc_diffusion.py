@@ -1,12 +1,7 @@
 # Copyright 2022 Twitter, Inc and Zhendong Wang.
 # SPDX-License-Identifier: Apache-2.0
 
-import copy
-import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from utils.logger import logger
 
 from agents.diffusion import Diffusion
 from agents.model import MLP
@@ -60,7 +55,6 @@ class Diffusion_BC(object):
             metric["bc_loss"].append(loss.item())
             metric["ql_loss"].append(0.0)
             metric["critic_loss"].append(0.0)
-
         return metric
 
     def sample_action(self, state):

@@ -1,16 +1,15 @@
 import copy
+
 import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
 
 from agents.helpers import (
+    Losses,
     cosine_beta_schedule,
+    extract,
     linear_beta_schedule,
     vp_beta_schedule,
-    extract,
-    Losses,
 )
 from utils.utils import Progress, Silent
 

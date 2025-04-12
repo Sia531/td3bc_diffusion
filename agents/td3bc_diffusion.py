@@ -1,8 +1,8 @@
 import copy
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
 
 from agents.diffusion import Diffusion
 from agents.model import MLP
