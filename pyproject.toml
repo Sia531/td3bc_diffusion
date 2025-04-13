@@ -38,11 +38,6 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [[tool.uv.index]]
-<<<<<<< HEAD
-name = "pytorch-cu124"
-url = "https://download.pytorch.org/whl/cu124"
-=======
 name = "pytorch-cu126"
 url = "https://download.pytorch.org/whl/cu126"
->>>>>>> f0b02b1 (migrate to new api and packages)
 explicit = true
