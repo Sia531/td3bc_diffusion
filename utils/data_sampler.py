@@ -1,6 +1,3 @@
-# Copyright 2022 Twitter, Inc and Zhendong Wang.
-# SPDX-License-Identifier: Apache-2.0
-
 import numpy as np
 import torch
 
@@ -83,19 +80,18 @@ class Data_Sampler(object):
             self.not_done[ind].to(self.device),
         )
 
-
-def iql_normalize(reward, not_done):
-    trajs_rt = []
-    episode_return = 0.0
-    for i in range(len(reward)):
-        episode_return += reward[i]
-        if not not_done[i]:
-            trajs_rt.append(episode_return)
-            episode_return = 0.0
-    rt_max, rt_min = (
-        torch.max(torch.tensor(trajs_rt)),
-        torch.min(torch.tensor(trajs_rt)),
-    )
-    reward /= rt_max - rt_min
-    reward *= 1000.0
-    return reward
+    def iql_normalize(self, reward, not_done):
+        trajs_rt = []
+        episode_return = 0.0
+        for i in range(len(reward)):
+            episode_return += reward[i]
+            if not not_done[i]:
+                trajs_rt.append(episode_return)
+                episode_return = 0.0
+        rt_max, rt_min = (
+            torch.max(torch.tensor(trajs_rt)),
+            torch.min(torch.tensor(trajs_rt)),
+        )
+        reward /= rt_max - rt_min
+        reward *= 1000.0
+        return reward

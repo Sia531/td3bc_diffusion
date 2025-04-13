@@ -1,22 +1,24 @@
 import argparse
 import json
+import logging
 import os
 
 import gymnasium as gym
 import minari
 import numpy as np
 import torch
+from rich.console import Console
+from rich.logging import RichHandler
 
 from hyperparameters import hyperparameters
-from utils import utils
 from utils.data_sampler import Data_Sampler
-from utils.logger import logger, setup_logger
+from utils.Stoping import EarlyStopping
 
 
 def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, args):
     # 加载数据缓冲区（使用 Minari）
     data_sampler = Data_Sampler(dataset, device, args.reward_tune)
-    utils.print_banner("Loaded buffer")
+    logger.info("Loaded buffer")
 
     if args.algo == "ql":
         import agents.ql_diffusion
@@ -67,39 +69,35 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
             beta_schedule=args.beta_schedule,
             n_timesteps=args.T,
             lr=args.lr,
-            lr_decay=args.lr_decay,
-            lr_maxt=args.num_epochs,
-            gn=args.gn,
         )
 
     early_stop = False
-    stop_check = utils.EarlyStopping(tolerance=1, min_delta=0.0)
-    writer = None  # SummaryWriter(output_dir)
+    stop_check = EarlyStopping(tolerance=1, min_delta=0.0)
 
     evaluations = []
     training_iters = 0
     max_timesteps = args.num_epochs * args.num_steps_per_epoch
     metric = 100.0
-    utils.print_banner("Training Start", separator="*", num_star=90)
+    logger.info("Training Start")
     while (training_iters < max_timesteps) and (not early_stop):
         iterations = int(args.eval_freq * args.num_steps_per_epoch)
         loss_metric = agent.train(
             data_sampler,
             iterations=iterations,
             batch_size=args.batch_size,
-            log_writer=writer,
         )
         training_iters += iterations
         curr_epoch = int(training_iters // int(args.num_steps_per_epoch))
 
-        # Logging
-        utils.print_banner(f"Train step: {training_iters}", separator="*", num_star=90)
-        logger.record_tabular("Trained Epochs", curr_epoch)
-        logger.record_tabular("BC Loss", np.mean(loss_metric["bc_loss"]))
-        logger.record_tabular("QL Loss", np.mean(loss_metric["ql_loss"]))
-        logger.record_tabular("Actor Loss", np.mean(loss_metric["actor_loss"]))
-        logger.record_tabular("Critic Loss", np.mean(loss_metric["critic_loss"]))
-        logger.dump_tabular()
+        # 日志输出：用 logger.info 或 logger.info 打印关键信息
+        logger.info(
+            "[bold yellow]" + f"Train step: {training_iters}" + "[/bold yellow]"
+        )
+        logger.info(f"Trained Epochs: {curr_epoch}")
+        logger.info(f"BC Loss: {np.mean(loss_metric['bc_loss'])}")
+        logger.info(f"QL Loss: {np.mean(loss_metric['ql_loss'])}")
+        logger.info(f"Actor Loss: {np.mean(loss_metric['actor_loss'])}")
+        logger.info(f"Critic Loss: {np.mean(loss_metric['critic_loss'])}")
 
         # Evaluation
         eval_res, eval_res_std, eval_norm_res, eval_norm_res_std = eval_policy(
@@ -120,9 +118,8 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
         )
         os.makedirs(output_dir, exist_ok=True)
         np.save(os.path.join(output_dir, "eval"), evaluations)
-        logger.record_tabular("Average Episodic Reward", eval_res)
-        logger.record_tabular("Average Episodic N-Reward", eval_norm_res)
-        logger.dump_tabular()
+        logger.info(f"Average Episodic Reward: {eval_res}")
+        logger.info(f"Average Episodic N-Reward: {eval_norm_res}")
 
         bc_loss = np.mean(loss_metric["bc_loss"])
         if args.early_stop:
@@ -162,8 +159,6 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
 
         with open(os.path.join(output_dir, f"best_score_{args.ms}.txt"), "w") as f:
             f.write(json.dumps(best_res))
-
-    # writer.close()
 
 
 def unwrap_env(env):
@@ -206,7 +201,7 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
         avg_norm_score = avg_reward
         std_norm_score = std_reward
 
-    utils.print_banner(
+    logger.info(
         f"Evaluation over {eval_episodes} episodes: {avg_reward:.2f} {avg_norm_score:.2f}"
     )
     return avg_reward, std_reward, avg_norm_score, std_norm_score
@@ -273,9 +268,31 @@ if __name__ == "__main__":
     results_dir = os.path.join(args.output_dir, file_name)
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
-    utils.print_banner(f"Saving location: {results_dir}")
     variant = vars(args)
     variant.update(version="Diffusion-Policies-RL")
+
+    # 日志输出到文件（纯文本，不带颜色）
+    file_handler = logging.FileHandler(results_dir + "/log.txt", mode="w")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(
+        logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    )
+
+    # RichHandler 输出到终端（带颜色）
+    rich_handler = RichHandler(rich_tracebacks=True)
+    rich_handler.setLevel(logging.INFO)
+
+    # Rich logger 初始化，使用 RichHandler 替代默认格式
+    logging.basicConfig(
+        level="INFO",
+        format="%(message)s",
+        datefmt="[%X]",
+        handlers=[rich_handler, file_handler],
+    )
+    logger = logging.getLogger("rich")
+    console = Console()
+
+    logger.info(f"Saving location: {results_dir}")
 
     # === 使用 Minari 加载数据集 ===
     dataset = minari.load_dataset(args.env_name, download=True)
@@ -306,10 +323,7 @@ if __name__ == "__main__":
     variant.update(state_dim=state_dim)
     variant.update(action_dim=action_dim)
     variant.update(max_action=max_action)
-    setup_logger(os.path.basename(results_dir), variant=variant, log_dir=results_dir)
-    utils.print_banner(
-        f"Env: {env_name}, state_dim: {state_dim}, action_dim: {action_dim}"
-    )
+    logger.info(f"Env: {env_name}, state_dim: {state_dim}, action_dim: {action_dim}")
 
     # === 开始训练 ===
     train_agent(

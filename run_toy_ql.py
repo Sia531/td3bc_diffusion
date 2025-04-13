@@ -1,10 +1,10 @@
-import os
-import torch
-import numpy as np
-from torch.distributions import Normal
-import seaborn as sns
-import matplotlib.pyplot as plt
 import argparse
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+from torch.distributions import Normal
 
 from toy_experiments.toy_helpers import Data_Sampler
 

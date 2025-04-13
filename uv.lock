@@ -265,6 +265,36 @@ wheels = [
 ]
 
 [[package]]
+name = "cuda-bindings"
+version = "12.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pywin32", marker = "sys_platform == 'win32'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/45/4db82dec1cec4579cd9c41fe171f7580b5b65aa0556baa0f60cff893674a/cuda_bindings-12.8.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:435f48a20acc9a89889784e4e7c333765bc40c6ae202101bde27b4abf7ba0233", size = 10991437 },
+    { url = "https://files.pythonhosted.org/packages/9a/cc/27485aa29bbaadcc9eca07aaea1198807d7c2171550c290533a039d4efee/cuda_bindings-12.8.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:33182c8aadf1c4ecf5e2672b5f0023f3be06011c22c916663eae6f33b1af90ff", size = 11331750 },
+    { url = "https://files.pythonhosted.org/packages/8e/71/b04b633274819037021d1b5fd73cb112433aba0f3c0831b0aa560dd21328/cuda_bindings-12.8.0-cp311-cp311-win_amd64.whl", hash = "sha256:70272dfe67d8cfbde34d7cd54b1754e8224924183392c59d64e623cdfab59e7e", size = 11089043 },
+    { url = "https://files.pythonhosted.org/packages/3c/16/621f2ff6e4c6a0c1d57f5a0a373d1fb9d10eb9a7f05052cc64eba2e7dab2/cuda_bindings-12.8.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0865c9b75ee8f0535044c3f0f06ca34a37131192b573ab59e20a9e058da1ead4", size = 10904424 },
+    { url = "https://files.pythonhosted.org/packages/59/11/aee1afd60a5d6af67994dd88697912be22366a6e548e52e6cd2defdbe678/cuda_bindings-12.8.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e0e6a889c87238e6cd55e9b25ce4fd1d90fe2d4169982860fed5f0bc3230795e", size = 11235285 },
+    { url = "https://files.pythonhosted.org/packages/c1/c7/eedad18aeb461e9a3c1f8e2ea856caa50202a572b024912cb561f847a054/cuda_bindings-12.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:d0123d841cb3053d227e18b08ea7680d0b5ca64fab4664a2b80b7c83c8edf1ee", size = 11224401 },
+    { url = "https://files.pythonhosted.org/packages/4e/82/dc34a092d9111524eea70671d41d72dd3a5452ef70c424680bee1daf9c45/cuda_bindings-12.8.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e264ea93027c7448b9efa134729c12217ca9096051114ee7a9425d49b5a14222", size = 10722116 },
+    { url = "https://files.pythonhosted.org/packages/78/f2/b5c3f07f743e74c1f5c42bb2fc6e735f3adac8b526f60ef731d861663dd9/cuda_bindings-12.8.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:099f27e79e754346fa51517168787cda395fb437b31fbf20771c002f30adc0c9", size = 11039795 },
+    { url = "https://files.pythonhosted.org/packages/d5/89/d1f3c70651cdeb7c276c0503aea34c1d0c22f8bc66de73887f5ce40c600a/cuda_bindings-12.8.0-cp313-cp313-win_amd64.whl", hash = "sha256:630290148879b47f5e34629ee15061414caaf2f73ea284175a73b30427ad94fd", size = 11190771 },
+]
+
+[[package]]
+name = "cuda-python"
+version = "12.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cuda-bindings" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/2c/02bb311b996ffb91d05f8c1fb79131bf50855f7410dd33d09f800fe78c58/cuda_python-12.8.0-py3-none-any.whl", hash = "sha256:3fca3a03c247d6aa1c414989dfe0dd21e9500307b8573f72216ed57d99344c5a", size = 11930 },
+]
+
+[[package]]
 name = "cycler"
 version = "0.12.1"
 source = { registry = "https://pypi.org/simple" }
@@ -320,11 +350,13 @@ cpu = [
     { name = "torch", version = "2.6.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
 ]
 cu126 = [
+    { name = "cuda-python" },
     { name = "torch", version = "2.6.0+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" } },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "cuda-python", marker = "extra == 'cu126'" },
     { name = "gymnasium", extras = ["all"] },
     { name = "huggingface-hub" },
     { name = "joblib" },
@@ -1717,6 +1749,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3", size = 320884 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00", size = 509225 },
+]
+
+[[package]]
+name = "pywin32"
+version = "310"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f7/b1/68aa2986129fb1011dabbe95f0136f44509afaf072b12b8f815905a39f33/pywin32-310-cp311-cp311-win32.whl", hash = "sha256:1e765f9564e83011a63321bb9d27ec456a0ed90d3732c4b2e312b855365ed8bd", size = 8784284 },
+    { url = "https://files.pythonhosted.org/packages/b3/bd/d1592635992dd8db5bb8ace0551bc3a769de1ac8850200cfa517e72739fb/pywin32-310-cp311-cp311-win_amd64.whl", hash = "sha256:126298077a9d7c95c53823934f000599f66ec9296b09167810eb24875f32689c", size = 9520748 },
+    { url = "https://files.pythonhosted.org/packages/90/b1/ac8b1ffce6603849eb45a91cf126c0fa5431f186c2e768bf56889c46f51c/pywin32-310-cp311-cp311-win_arm64.whl", hash = "sha256:19ec5fc9b1d51c4350be7bb00760ffce46e6c95eaf2f0b2f1150657b1a43c582", size = 8455941 },
+    { url = "https://files.pythonhosted.org/packages/6b/ec/4fdbe47932f671d6e348474ea35ed94227fb5df56a7c30cbbb42cd396ed0/pywin32-310-cp312-cp312-win32.whl", hash = "sha256:8a75a5cc3893e83a108c05d82198880704c44bbaee4d06e442e471d3c9ea4f3d", size = 8796239 },
+    { url = "https://files.pythonhosted.org/packages/e3/e5/b0627f8bb84e06991bea89ad8153a9e50ace40b2e1195d68e9dff6b03d0f/pywin32-310-cp312-cp312-win_amd64.whl", hash = "sha256:bf5c397c9a9a19a6f62f3fb821fbf36cac08f03770056711f765ec1503972060", size = 9503839 },
+    { url = "https://files.pythonhosted.org/packages/1f/32/9ccf53748df72301a89713936645a664ec001abd35ecc8578beda593d37d/pywin32-310-cp312-cp312-win_arm64.whl", hash = "sha256:2349cc906eae872d0663d4d6290d13b90621eaf78964bb1578632ff20e152966", size = 8459470 },
+    { url = "https://files.pythonhosted.org/packages/1c/09/9c1b978ffc4ae53999e89c19c77ba882d9fce476729f23ef55211ea1c034/pywin32-310-cp313-cp313-win32.whl", hash = "sha256:5d241a659c496ada3253cd01cfaa779b048e90ce4b2b38cd44168ad555ce74ab", size = 8794384 },
+    { url = "https://files.pythonhosted.org/packages/45/3c/b4640f740ffebadd5d34df35fecba0e1cfef8fde9f3e594df91c28ad9b50/pywin32-310-cp313-cp313-win_amd64.whl", hash = "sha256:667827eb3a90208ddbdcc9e860c81bde63a135710e21e4cb3348968e4bd5249e", size = 9503039 },
+    { url = "https://files.pythonhosted.org/packages/b4/f4/f785020090fb050e7fb6d34b780f2231f302609dc964672f72bfaeb59a28/pywin32-310-cp313-cp313-win_arm64.whl", hash = "sha256:e308f831de771482b7cf692a1f308f8fca701b2d8f9dde6cc440c7da17e47b33", size = 8458152 },
 ]
 
 [[package]]

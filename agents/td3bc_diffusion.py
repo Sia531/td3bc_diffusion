@@ -59,8 +59,8 @@ class Diffusion_TD3BC(object):
         self.device = device
         self.alpha = alpha  # weighting between BC loss and Q value
 
-    def train(self, replay_buffer, iterations, batch_size=256, log_writer=None):
-        metric = {"bc_loss": [], "actor_loss": [], "critic_loss": []}
+    def train(self, replay_buffer, iterations, batch_size=256):
+        metric = {"bc_loss": [], "actor_loss": [], "critic_loss": [], "ql_loss": []}
 
         for _ in range(iterations):
             state, action, next_state, reward, not_done = replay_buffer.sample(
@@ -115,6 +115,7 @@ class Diffusion_TD3BC(object):
             metric["bc_loss"].append(bc_loss.item())
             metric["critic_loss"].append(q_loss.item())
             metric["actor_loss"].append(actor_loss.item())
+            metric["ql_loss"].append(0.0)
 
         return metric
 
