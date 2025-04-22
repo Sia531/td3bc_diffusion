@@ -7,6 +7,7 @@ import gymnasium as gym
 import minari
 import numpy as np
 import torch
+from gymnasium.wrappers import RecordEpisodeStatistics, RecordVideo
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -130,6 +131,13 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
         if args.save_best_model:
             agent.save_model(output_dir, curr_epoch)
 
+        if args.record:
+            record(
+                dataset.env_spec.id,
+                agent,
+                os.path.join(results_dir, "video"),
+            )
+
     # 模型选择：online 或 offline
     scores = np.array(evaluations)
     if args.ms == "online":
@@ -207,6 +215,29 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
     return avg_reward, std_reward, avg_norm_score, std_norm_score
 
 
+def record(env_name, policy, output_dir, num_eval_episodes=4):
+    if not os.path.exists(os.path.join(output_dir, "video")):
+        os.makedirs(os.path.join(output_dir, "video"))
+    env = gym.make(env_name, render_mode="rgb_array")
+    env = RecordVideo(
+        env,
+        video_folder=output_dir,
+        name_prefix="eval",
+        episode_trigger=lambda _: True,
+    )
+    env = RecordEpisodeStatistics(env, buffer_length=num_eval_episodes)
+
+    for episode_num in range(num_eval_episodes):
+        obs, __ = env.reset()
+        episode_over = False
+        while not episode_over:
+            action = policy.sample_action(np.array(obs))
+            obs, _, terminated, truncated, __ = env.step(action)
+
+            episode_over = terminated or truncated
+    env.close()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     ### 实验设置 ###
@@ -272,7 +303,7 @@ if __name__ == "__main__":
     variant.update(version="Diffusion-Policies-RL")
 
     # 日志输出到文件（纯文本，不带颜色）
-    file_handler = logging.FileHandler(results_dir + "/log.txt", mode="w")
+    file_handler = logging.FileHandler(os.path.join(results_dir, "log.txt"), mode="w")
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
