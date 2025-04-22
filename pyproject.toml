@@ -26,7 +26,7 @@ torch = [
 
 [project.optional-dependencies]
 cpu = ["torch>=2.6.0"]
-cu126 = ["torch>=2.6.0","cuda-python"]
+cu126 = ["torch>=2.6.0", "cuda-python"]
 
 [tool.uv]
 conflicts = [[{ extra = "cpu" }, { extra = "cu126" }]]
@@ -34,10 +34,10 @@ conflicts = [[{ extra = "cpu" }, { extra = "cu126" }]]
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
+url = "https://mirror.nju.edu.cn/pytorch/whl/cpu"
 explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cu126"
-url = "https://download.pytorch.org/whl/cu126"
+url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/"
 explicit = true
