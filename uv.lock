@@ -338,6 +338,7 @@ dependencies = [
     { name = "matplotlib" },
     { name = "minari", extra = ["all"] },
     { name = "numpy" },
+    { name = "pyopengl-accelerate" },
     { name = "python-dateutil" },
     { name = "seaborn" },
     { name = "tensorboard" },
@@ -346,12 +347,12 @@ dependencies = [
 
 [package.optional-dependencies]
 cpu = [
-    { name = "torch", version = "2.6.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
-    { name = "torch", version = "2.6.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
+    { name = "torch", version = "2.6.0", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
+    { name = "torch", version = "2.6.0+cpu", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
 ]
 cu126 = [
     { name = "cuda-python" },
-    { name = "torch", version = "2.6.0+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" } },
+    { name = "torch", version = "2.6.0+cu126", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cu126/" } },
 ]
 
 [package.metadata]
@@ -363,11 +364,12 @@ requires-dist = [
     { name = "matplotlib" },
     { name = "minari", extras = ["all"] },
     { name = "numpy" },
+    { name = "pyopengl-accelerate", specifier = ">=3.1.9" },
     { name = "python-dateutil" },
     { name = "seaborn" },
     { name = "tensorboard" },
-    { name = "torch", marker = "extra == 'cpu'", specifier = ">=2.6.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "diffusion-policies-for-offline-rl", extra = "cpu" } },
-    { name = "torch", marker = "extra == 'cu126'", specifier = ">=2.6.0", index = "https://download.pytorch.org/whl/cu126", conflict = { package = "diffusion-policies-for-offline-rl", extra = "cu126" } },
+    { name = "torch", marker = "extra == 'cpu'", specifier = ">=2.6.0", index = "https://mirror.nju.edu.cn/pytorch/whl/cpu", conflict = { package = "diffusion-policies-for-offline-rl", extra = "cpu" } },
+    { name = "torch", marker = "extra == 'cu126'", specifier = ">=2.6.0", index = "https://mirror.nju.edu.cn/pytorch/whl/cu126/", conflict = { package = "diffusion-policies-for-offline-rl", extra = "cu126" } },
     { name = "types-python-dateutil" },
 ]
 provides-extras = ["cpu", "cu126"]
@@ -678,10 +680,10 @@ all = [
     { name = "opencv-python" },
     { name = "pygame" },
     { name = "swig" },
-    { name = "torch", version = "2.6.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
+    { name = "torch", version = "2.6.0", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
     { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "(extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126') or (extra != 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra != 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
-    { name = "torch", version = "2.6.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
-    { name = "torch", version = "2.6.0+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "extra == 'extra-33-diffusion-policies-for-offline-rl-cu126'" },
+    { name = "torch", version = "2.6.0+cpu", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
+    { name = "torch", version = "2.6.0+cu126", source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cu126/" }, marker = "extra == 'extra-33-diffusion-policies-for-offline-rl-cu126'" },
 ]
 
 [[package]]
@@ -1713,6 +1715,35 @@ wheels = [
 ]
 
 [[package]]
+name = "pyopengl-accelerate"
+version = "3.1.9"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9d/9e/a87f972148971c785773dcc792226530ff78840420e34b3cc51b221693a2/pyopengl_accelerate-3.1.9.tar.gz", hash = "sha256:85957c7c76975818ff759ec9243f9dc7091ef6f373ea37a2eb50c320fd9a86f3", size = 21799 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/aa/ba/2b17bfc85c079653b3736568d42a4aa1af8606a29c0f40c48af221ee8718/PyOpenGL_accelerate-3.1.9-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:97e2e2daddab0ed8d690871ddff976e82a480cdef7d6df39b69d79afa3ce3430", size = 445399 },
+    { url = "https://files.pythonhosted.org/packages/85/c9/aacc08c5b8f0e3599ed7a2fb258d2ec0cc4aae0dbda6b776a9d375c3ecad/PyOpenGL_accelerate-3.1.9-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f7bbef8a910d37e9e18ed5f8ff8dff40c9161e84b90e96c04bed5c147bb3edc6", size = 2992556 },
+    { url = "https://files.pythonhosted.org/packages/09/f7/8c9b83a64cb76bb79afc8e64ae37666e35f30bc3a9731235ff9d79a39c85/PyOpenGL_accelerate-3.1.9-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d63cef49346ba556632a4a163025628b4872ca499d760d4e6410adcbefa84949", size = 3198117 },
+    { url = "https://files.pythonhosted.org/packages/01/f1/4e673ffacda41b1f06d23f202a52f9940f83d87fdaebb3286b6b13a44f15/PyOpenGL_accelerate-3.1.9-cp311-cp311-musllinux_1_2_i686.whl", hash = "sha256:182f8b3e8ac19f4a5f7fe1178037ae840552351bcd264f5c34739db676467377", size = 2917142 },
+    { url = "https://files.pythonhosted.org/packages/bd/df/03aa69ffa2a7128bccc6268e6b5cbfa4e0dc197488d7ac7870545b082d1f/PyOpenGL_accelerate-3.1.9-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:659ac06bc6a6031fef5e3b5c965d61d5763833e896b7b4620cb4e036180d60db", size = 3076446 },
+    { url = "https://files.pythonhosted.org/packages/03/3f/90bc574855baedbe010a0d5ea91c4f6164b5bc4fa95199490cb648abcfdb/PyOpenGL_accelerate-3.1.9-cp311-cp311-win32.whl", hash = "sha256:f544f97de76323c6e137ee8c859a81b654445273f159e63fdc1239f220376ba5", size = 364057 },
+    { url = "https://files.pythonhosted.org/packages/3c/0c/ca92a6630297b154236deaba5f5be67c34426e765ccc7c4bd26308da8fde/PyOpenGL_accelerate-3.1.9-cp311-cp311-win_amd64.whl", hash = "sha256:d7d2b0ac17ea369eb6e063378c8b6c0addf095c82f5879cd500a407c01127619", size = 426489 },
+    { url = "https://files.pythonhosted.org/packages/4b/8f/dc306a0c35d6953e33f672d7ab33c49091e39fea97d212ab707a65de4275/PyOpenGL_accelerate-3.1.9-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:7981bc643edd6d30e35d08b393ec382773463e3aabb364695df51b9adbcf9e20", size = 450232 },
+    { url = "https://files.pythonhosted.org/packages/d9/8e/4780e54fe4a334f9e47075ad1b3f0d57775cdc9b33571c26221a3672f434/PyOpenGL_accelerate-3.1.9-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:15a4c6a11dcfc9eec311f3596cda62fff2965ad6d62919415fb6573f7ef8c1c9", size = 2986440 },
+    { url = "https://files.pythonhosted.org/packages/42/ae/67ddc9674d07c1900b0f094a16d2fa996492ffb25ad974e5af4e53dcad22/PyOpenGL_accelerate-3.1.9-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2b6f1f3680f33f10e67bb679ac0fb6946905a22e52d2eba71a66bf9d3ef94b33", size = 3217129 },
+    { url = "https://files.pythonhosted.org/packages/05/ff/3f488220088baeb9699d2ad26788218efa9b6963346de52eb476601a071d/PyOpenGL_accelerate-3.1.9-cp312-cp312-musllinux_1_2_i686.whl", hash = "sha256:b58837914dbd6f89ba831d4a3dede1595a74485d7b476483966f08bac9bd4320", size = 2935214 },
+    { url = "https://files.pythonhosted.org/packages/c8/71/460665cf2d56c5e0fc07241272a39199ed40df6a6db5fb7fb3a224d614a8/PyOpenGL_accelerate-3.1.9-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:4cd6d767de3c81b538682058c6114587bfa5e4a263d0f4b023b0404fce07d6d7", size = 3090475 },
+    { url = "https://files.pythonhosted.org/packages/20/82/850e4972244eb65dbfac64bf46f504b04c29b97526ba62a5ecacb9a9cbc5/PyOpenGL_accelerate-3.1.9-cp312-cp312-win32.whl", hash = "sha256:8042393b3869b455d67b60e6c87dc349ae89d3a0858f8018f8bd8d69f323ac3c", size = 360799 },
+    { url = "https://files.pythonhosted.org/packages/6b/09/4c4975841c9e88ed9ef79940b0f714fc1af40b653f0697a4b37b7ba4eb92/PyOpenGL_accelerate-3.1.9-cp312-cp312-win_amd64.whl", hash = "sha256:a78731c88a81a895cf9849139bffb40cbea9fb0e640ccc3cbc38ea909e1234f4", size = 422447 },
+    { url = "https://files.pythonhosted.org/packages/1c/69/896cab645d4f7c755eaaea71834811cd19e09003a9dbfa9273ba0aa42e10/PyOpenGL_accelerate-3.1.9-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:95fd40a537637355fb7f0a03c055fbad6efdeea059607f4966b7631b580353c5", size = 438474 },
+    { url = "https://files.pythonhosted.org/packages/e8/a3/3c8770ebfef3530f71722743c04632c3594b544461ce10ee4bc13f6aa6e9/PyOpenGL_accelerate-3.1.9-cp313-cp313-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d5992ebf8befb6e45c6198e45f0f2d8fa26c30cbae68a1f08d6646c6d95b5605", size = 2899068 },
+    { url = "https://files.pythonhosted.org/packages/6a/95/22c07ec2414928ddb50eb0e35d6cd6343ffef6ad74f42e86fefbaaa6b04e/PyOpenGL_accelerate-3.1.9-cp313-cp313-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:10ab017316dc8bced13b2426b9cc6ab9aeb627ca020e9bc0836ef92b5e0942ea", size = 3119442 },
+    { url = "https://files.pythonhosted.org/packages/b2/76/8095f7c5b68376cbde9e32c4be20089fb055558010580fdb3eff6f9c2e99/PyOpenGL_accelerate-3.1.9-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:d80dab32facd0195e8213754a7a71ba9d9343e413ff84bd8e552d7a66552b254", size = 2853493 },
+    { url = "https://files.pythonhosted.org/packages/d2/21/9acfae57fa636290380b7c43e4bd57fc513f04b75a036372306458be80ac/PyOpenGL_accelerate-3.1.9-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:eb56fa15bdf1a029a8bf1682f5af436b02e721fcd1b43cf05eeda99ca9b6a9e1", size = 3006703 },
+    { url = "https://files.pythonhosted.org/packages/ef/ab/5a3c821ed47a7bce8dfe6d35a9dd903b2906f5cf8380d29620ca86cb4d02/PyOpenGL_accelerate-3.1.9-cp313-cp313-win32.whl", hash = "sha256:19dda83f7c96f598b8bc895ee2199bd1c45d064993175bbbe251905b9d9b40a4", size = 357167 },
+    { url = "https://files.pythonhosted.org/packages/03/d3/b0b5b4c5404d7269458f4297b2fe86017daed8f29f40f07eb25ee51c902e/PyOpenGL_accelerate-3.1.9-cp313-cp313-win_amd64.whl", hash = "sha256:ed02cc9abd7662e787bc7491bf7f78f6536cf550a148d0fbff6727bed9b57124", size = 417563 },
+]
+
+[[package]]
 name = "pyparsing"
 version = "3.2.3"
 source = { registry = "https://pypi.org/simple" }
@@ -2081,7 +2112,7 @@ wheels = [
 [[package]]
 name = "torch"
 version = "2.6.0"
-source = { registry = "https://download.pytorch.org/whl/cpu" }
+source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'darwin'",
     "python_full_version == '3.12.*' and sys_platform == 'darwin'",
@@ -2097,9 +2128,9 @@ dependencies = [
     { name = "typing-extensions", marker = "(sys_platform == 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0-cp311-none-macosx_11_0_arm64.whl", hash = "sha256:94fc63b3b4bedd327af588696559f68c264440e2503cc9e6954019473d74ae21" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0-cp312-none-macosx_11_0_arm64.whl", hash = "sha256:9a610afe216a85a8b9bc9f8365ed561535c93e804c2a317ef7fabcc5deda0989" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0-cp313-none-macosx_11_0_arm64.whl", hash = "sha256:ff96f4038f8af9f7ec4231710ed4549da1bdebad95923953a25045dcf6fd87e2" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0-cp311-none-macosx_11_0_arm64.whl", hash = "sha256:94fc63b3b4bedd327af588696559f68c264440e2503cc9e6954019473d74ae21" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0-cp312-none-macosx_11_0_arm64.whl", hash = "sha256:9a610afe216a85a8b9bc9f8365ed561535c93e804c2a317ef7fabcc5deda0989" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0-cp313-none-macosx_11_0_arm64.whl", hash = "sha256:ff96f4038f8af9f7ec4231710ed4549da1bdebad95923953a25045dcf6fd87e2" },
 ]
 
 [[package]]
@@ -2158,7 +2189,7 @@ wheels = [
 [[package]]
 name = "torch"
 version = "2.6.0+cpu"
-source = { registry = "https://download.pytorch.org/whl/cpu" }
+source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cpu" }
 resolution-markers = [
     "python_full_version >= '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux'",
     "python_full_version == '3.12.*' and platform_machine == 'aarch64' and sys_platform == 'linux'",
@@ -2177,23 +2208,23 @@ dependencies = [
     { name = "typing-extensions", marker = "(sys_platform != 'darwin' and extra == 'extra-33-diffusion-policies-for-offline-rl-cpu') or (extra == 'extra-33-diffusion-policies-for-offline-rl-cpu' and extra == 'extra-33-diffusion-policies-for-offline-rl-cu126')" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:5b6ae523bfb67088a17ca7734d131548a2e60346c622621e4248ed09dd0790cc" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:d3dab9fb0294f268aec28e8aaba834e9d006b90a50db5bc2fe2191a9d48c6084" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl", hash = "sha256:24c9d3d13b9ea769dd7bd5c11cfa1fc463fd7391397156565484565ca685d908" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-linux_x86_64.whl", hash = "sha256:59e78aa0c690f70734e42670036d6b541930b8eabbaa18d94e090abf14cc4d91" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:318290e8924353c61b125cdc8768d15208704e279e7757c113b9620740deca98" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-win_amd64.whl", hash = "sha256:4027d982eb2781c93825ab9527f17fbbb12dbabf422298e4b954be60016f87d8" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-linux_x86_64.whl", hash = "sha256:e70ee2e37ad27a90201d101a41c2e10df7cf15a9ebd17c084f54cf2518c57bdf" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:b5e7e8d561b263b5ad8049736281cd12c78e51e7bc1a913fd4098fd0e0b96347" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-win_amd64.whl", hash = "sha256:b436a6c62d086dc5b32f5721b59f0ca8ad3bf9de09ee9b5b83dbf1e7a7e22c60" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313t-linux_x86_64.whl", hash = "sha256:fb34d6cc4e6e20e66d74852c3d84e0301dc5e1a7c822076ef288886f978390f0" },
-    { url = "https://download.pytorch.org/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:7cac05af909ee1c5c2915e8f3efaa1ea015e7e414be0ff53071402b9e4f3c7df" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-linux_x86_64.whl", hash = "sha256:5b6ae523bfb67088a17ca7734d131548a2e60346c622621e4248ed09dd0790cc" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:d3dab9fb0294f268aec28e8aaba834e9d006b90a50db5bc2fe2191a9d48c6084" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp311-cp311-win_amd64.whl", hash = "sha256:24c9d3d13b9ea769dd7bd5c11cfa1fc463fd7391397156565484565ca685d908" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-linux_x86_64.whl", hash = "sha256:59e78aa0c690f70734e42670036d6b541930b8eabbaa18d94e090abf14cc4d91" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:318290e8924353c61b125cdc8768d15208704e279e7757c113b9620740deca98" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp312-cp312-win_amd64.whl", hash = "sha256:4027d982eb2781c93825ab9527f17fbbb12dbabf422298e4b954be60016f87d8" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-linux_x86_64.whl", hash = "sha256:e70ee2e37ad27a90201d101a41c2e10df7cf15a9ebd17c084f54cf2518c57bdf" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:b5e7e8d561b263b5ad8049736281cd12c78e51e7bc1a913fd4098fd0e0b96347" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313-win_amd64.whl", hash = "sha256:b436a6c62d086dc5b32f5721b59f0ca8ad3bf9de09ee9b5b83dbf1e7a7e22c60" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313t-linux_x86_64.whl", hash = "sha256:fb34d6cc4e6e20e66d74852c3d84e0301dc5e1a7c822076ef288886f978390f0" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cpu/torch-2.6.0%2Bcpu-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:7cac05af909ee1c5c2915e8f3efaa1ea015e7e414be0ff53071402b9e4f3c7df" },
 ]
 
 [[package]]
 name = "torch"
 version = "2.6.0+cu126"
-source = { registry = "https://download.pytorch.org/whl/cu126" }
+source = { registry = "https://mirror.nju.edu.cn/pytorch/whl/cu126/" }
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'darwin'",
     "python_full_version == '3.12.*' and sys_platform == 'darwin'",
@@ -2215,17 +2246,17 @@ dependencies = [
     { name = "typing-extensions", marker = "extra == 'extra-33-diffusion-policies-for-offline-rl-cu126'" },
 ]
 wheels = [
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-linux_aarch64.whl", hash = "sha256:d4809b188f5c9b9753f7578085b79ae1f5d9c36a3fffc122e83e446ecf251325" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:cd3b15819315bd44d34e6fa56a8f6f64192608de17da112ec0cd6cd5fc1781f3" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-win_amd64.whl", hash = "sha256:5ddca43b81c64df8ce0c59260566e648ee46b2622ab6a718e38dea3c0ca059a1" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-linux_aarch64.whl", hash = "sha256:993e0e99c472df1d2746c3233ef8e88d992904fe75b8996a2c15439c43ff46c4" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:6bc5b9126daa3ac1e4d920b731da9f9503ff1f56204796de124e080f5cc3570e" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-win_amd64.whl", hash = "sha256:b10c39c83e5d1afd639b5c9f5683b351e97e41390a93f59c59187004a9949924" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-linux_aarch64.whl", hash = "sha256:e7913d9dcca60d352b296adf566ae9bb84c9e4d27414cf070b78a84c0a0ceb20" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:2356c759696f4e296a7a08e8146c6381ccf2da40990fe400264b189a8a6c4bab" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-win_amd64.whl", hash = "sha256:a1ce724eb9813fcd05b99cb8b652b2d02f447caba65f1469abd7d50af5e5323f" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313t-linux_aarch64.whl", hash = "sha256:e38a2564b15fba3fd8cb24d03d165b86a80fe3681b7207be5e500b100e19893c" },
-    { url = "https://download.pytorch.org/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:90d9c64ab8961595e05d4816e7190f38d8a1cd9931909a669da7bc398b9bc26b" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-linux_aarch64.whl", hash = "sha256:d4809b188f5c9b9753f7578085b79ae1f5d9c36a3fffc122e83e446ecf251325" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:cd3b15819315bd44d34e6fa56a8f6f64192608de17da112ec0cd6cd5fc1781f3" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp311-cp311-win_amd64.whl", hash = "sha256:5ddca43b81c64df8ce0c59260566e648ee46b2622ab6a718e38dea3c0ca059a1" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-linux_aarch64.whl", hash = "sha256:993e0e99c472df1d2746c3233ef8e88d992904fe75b8996a2c15439c43ff46c4" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:6bc5b9126daa3ac1e4d920b731da9f9503ff1f56204796de124e080f5cc3570e" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp312-cp312-win_amd64.whl", hash = "sha256:b10c39c83e5d1afd639b5c9f5683b351e97e41390a93f59c59187004a9949924" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-linux_aarch64.whl", hash = "sha256:e7913d9dcca60d352b296adf566ae9bb84c9e4d27414cf070b78a84c0a0ceb20" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:2356c759696f4e296a7a08e8146c6381ccf2da40990fe400264b189a8a6c4bab" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313-win_amd64.whl", hash = "sha256:a1ce724eb9813fcd05b99cb8b652b2d02f447caba65f1469abd7d50af5e5323f" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313t-linux_aarch64.whl", hash = "sha256:e38a2564b15fba3fd8cb24d03d165b86a80fe3681b7207be5e500b100e19893c" },
+    { url = "https://mirror.nju.edu.cn/pytorch/whl/cu126/torch-2.6.0%2Bcu126-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:90d9c64ab8961595e05d4816e7190f38d8a1cd9931909a669da7bc398b9bc26b" },
 ]
 
 [[package]]

@@ -80,6 +80,7 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
     max_timesteps = args.num_epochs * args.num_steps_per_epoch
     metric = 100.0
     logger.info("Training Start")
+
     while (training_iters < max_timesteps) and (not early_stop):
         iterations = int(args.eval_freq * args.num_steps_per_epoch)
         loss_metric = agent.train(
@@ -91,9 +92,7 @@ def train_agent(dataset, state_dim, action_dim, max_action, device, output_dir, 
         curr_epoch = int(training_iters // int(args.num_steps_per_epoch))
 
         # 日志输出：用 logger.info 或 logger.info 打印关键信息
-        logger.info(
-            "[bold yellow]" + f"Train step: {training_iters}" + "[/bold yellow]"
-        )
+        logger.info(f"Train step: {training_iters}")
         logger.info(f"Trained Epochs: {curr_epoch}")
         logger.info(f"BC Loss: {np.mean(loss_metric['bc_loss'])}")
         logger.info(f"QL Loss: {np.mean(loss_metric['ql_loss'])}")
@@ -270,7 +269,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--ms", default="offline", type=str, help="['online', 'offline']"
     )
-
+    parser.add_argument("--record", action="store_true", default=True)
     args = parser.parse_args()
     args.device = f"cuda:{args.device}" if torch.cuda.is_available() else "cpu"
     args.output_dir = f"{args.dir}"

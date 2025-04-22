@@ -16,6 +16,7 @@ dependencies = [
     "huggingface_hub",
     "gymnasium[all]",
     "types-python-dateutil",
+    "pyopengl-accelerate",
 ]
 
 [tool.uv.sources]
