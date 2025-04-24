@@ -13,8 +13,10 @@ class QNetwork(nn.Module):
         super(QNetwork, self).__init__()
         self.q = nn.Sequential(
             nn.Linear(state_dim + action_dim, 256),
+            nn.LayerNorm(256),
             nn.ReLU(),
             nn.Linear(256, 256),
+            nn.LayerNorm(256),
             nn.ReLU(),
             nn.Linear(256, 1),
         )
@@ -78,10 +80,15 @@ class Diffusion_TD3BC(object):
             # Q loss
             current_q1 = self.q1(state, action)
             current_q2 = self.q2(state, action)
-            q_loss = F.mse_loss(current_q1, target_q) + F.mse_loss(current_q2, target_q)
+            q_loss = F.smooth_l1_loss(current_q1, target_q) + F.smooth_l1_loss(
+                current_q2, target_q
+            )
 
             self.q_optimizer.zero_grad()
             q_loss.backward()
+            torch.nn.utils.clip_grad_norm_(
+                list(self.q1.parameters()) + list(self.q2.parameters()), max_norm=1.0
+            )
             self.q_optimizer.step()
 
             # Actor loss = TD3-BC
